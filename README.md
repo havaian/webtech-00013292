@@ -3,7 +3,7 @@
 ## 🧑‍🎓 ID of the student: **00013292**
 <br />
 
-## Public build of the website: <code><a href="https://replit.com/@havaian/webtech-00013292">[ Link ]</a></code>
+## Public build of the website: <code><a href="https://webtech-00013292.havaian.repl.co">[ Link ]</a></code>
 
 ## Manifest for the project: <code><a href="./MANIFEST.md">[ Link ]</a></code>
 <br />
