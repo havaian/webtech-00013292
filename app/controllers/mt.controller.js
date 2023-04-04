@@ -41,7 +41,7 @@ exports.addOneExpense = (req, res) => {
         let id = getRandomId();
         expenses[id] = {
             text: req.body.text,
-            amount: req.body.amount,
+            amount: parseFloat(req.body.amount),
             category: req.body.category,
             datetime: req.body.datetime,
         };
