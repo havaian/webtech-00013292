@@ -1,11 +1,11 @@
 {
-  "name": "mongodb-server",
-  "version": "1.0.0",
+  "name": "webtech-00013292",
+  "version": "2.0.0",
   "description": "",
-  "main": "server.js",
+  "main": "index.js",
   "scripts": {
-    "build": "node server.js",
-    "dev": "nodemon server.js"
+    "build": "node index.js",
+    "dev": "nodemon index.js"
   },
   "keywords": [
     "nodejs",
