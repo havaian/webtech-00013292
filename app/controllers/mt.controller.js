@@ -41,29 +41,26 @@ exports.addOneExpense = (req, res) => {
         let id = getRandomId();
         expenses[id] = {
             text: req.body.text,
-            amount: parseInt(req.body.amount),
+            amount: req.body.amount,
             category: req.body.category,
             datetime: req.body.datetime,
         };
         // logger.log('[ ADD ]', expenses[id]);
-        logFile.write(`\n[ ADD ] ${expenses[id]}`);
+        logFile.write(`\n✅ [ ADD ] { text: ${req.body.text}, amount: ${req.body.amount}, category: ${req.body.category}, datetime: ${req.body.datetime} }`);
         fs.writeFile(expense_path, JSON.stringify(expenses), (err) => {
             if (err) {
-                console.log(error_message, err);
                 // logger.error(error_message, err);
-                logFile.write("\n"+error_message, err);
+                logFile.write(`\n${error_message} - ${err}`);
                 res.status(400).send(err);
             }
             const message = "✅ Data written successfully to disk"; 
-            console.log(message);
             // logger.success(message);
-            logFile.write("\n"+message);
+            logFile.write(`\n${message}`);
             res.status(200).send(message);
         });
     } catch (err) {
-        console.log(error_message, err);
         // logger.error(error_message, err);
-        logFile.write("\n"+error_message, err);
+        logFile.write(`\n${error_message} - ${err}`);
         res.status(400).send(err);
     }
 };
@@ -73,21 +70,18 @@ exports.getAllExpenses = (req, res) => {
     try {
         if (Object.keys(expenses).length === 0) {
             const message = "❎ No expenses to show"; 
-            console.log(message);
             // logger.success(message);
-            logFile.write("\n"+message);
+            logFile.write(`\n${message}`);
             res.status(200).send(message);
         } else {
             const message = "✅ Data has been retrieved successfully"; 
-            console.log(message);
             // logger.success(message);
-            logFile.write("\n"+message);
+            logFile.write(`\n${message}`);
             res.status(200).send(expenses);
         }
     } catch (err) {
-        console.log(error_message, err);
         // logger.error(error_message, err);
-        logFile.write("\n"+error_message, err);
+        logFile.write(`\n${error_message} - ${err}`);
         res.status(400).send(err);
     }
 };
@@ -97,30 +91,26 @@ exports.getAllExpenses = (req, res) => {
 exports.updateOneExpense = (req, res) => {
     try {
         if (!expenses[req.params.id]) {
-            console.log("❌ No expense with such id present");
             // logger.error("❌ No expense with such id present");
             logFile.write("\n"+"❌ No expense with such id present");
             res.status(200).send("❌ No expense with such id present");
         } else {
             fs.writeFile(expense_path, JSON.stringify(expenses), (err) => {
                 if (err) {
-                    console.log(err_message, err);
                     // logger.error(error_message, err);
-                    logFile.write("\n"+error_message, err);
+                    logFile.write(`\n${error_message} - ${err}`);
                     res.status(400).send(err);
                 } else {
                     const message = "✅ Data written successfully to disk";
-                    console.log(message);
                     // logger.success(message);
-                    logFile.write("\n"+message)
+                    logFile.write(`\n${message}`)
                     res.status(200).send(message);
                 }
             });
         }
     } catch (err) {
-        console.log(message, err);
         // logger.error(message, err);
-        logFile.write("\n"+message, err);
+        logFile.write(`\n${message} - ${err}`);
         res.status(400).send(err);
     }
 };
@@ -130,33 +120,29 @@ exports.deleteOneExpense = (req, res) => {
     try {
         if (!expenses[req.params.id]) {
             const message = "❌ No expense with given id";
-            console.log(message);
             // logger.error(message);
-            logFile.write("\n"+message, err);
+            logFile.write(`\n${message} - ${err}`);
             res.status(400).send(message);
         } else {
             delete expenses[req.params.id];
             // logger.log('[ DELETE ]', req.params.id);
-            logFile.write(`\n[ DELETE ] ${req.params.id}`);
+            logFile.write(`\n✅ [ DELETE ] ${req.params.id}`);
             fs.writeFile(expense_path, JSON.stringify(expenses), (err) => {
                 if (err) {
-                    console.log(message, err);
                     // logger.error(message, err);
-                    logFile.write("\n"+message, err);
+                    logFile.write(`\n${message} - ${err}`);
                     res.status(400).send(err);
                 } else {
                     const message = "✅ Expense with given id deleted successfully";
-                    console.log(message);
                     // logger.success(message);
-                    logFile.write("\n"+message);
+                    logFile.write(`\n${message}`);
                     res.status(200).send(message);
                 }
             });
         }
     } catch (err) {
-        console.log(error_message, err);
         // logger.error(error_message, err);
-        logFile.write("\n"+error_message, err);
+        logFile.write(`\n${error_message} - ${err}`);
         res.status(400).send(err);
     }
 };
@@ -168,21 +154,18 @@ exports.deleteAllExpenses = (req, res) => {
         expenses = {};
         fs.writeFile(expense_path, JSON.stringify(expenses), (err) => {
             if (err) {
-                console.log(error_message, err);
                 // logger.error(error_message, err);
-                logFile.write("\n"+error_message, err);
+                logFile.write(`\n${error_message} - ${err}`);
                 res.status(400).send(err);
             }
             const message = "✅ All expenses deleted successfully"; 
-            console.log(message);
             // logger.success(message);
-            logFile.write("\n"+message);
+            logFile.write(`\n${message}`);
             res.status(200).send(message);
         });
     } catch (err) {
-        console.log(error_message, err);
         // logger.error(error_message, err);
-        logFile.write("\n"+error_message, err);
+        logFile.write(`\n${error_message} - ${err}`);
         res.status(400).send(err);
     }
 };
@@ -192,21 +175,18 @@ exports.getExpenseCategories = (req, res) => {
     try {
         if (Object.keys(expense_categories).length === 0) {
             const message = "❎ No categories to show";
-            console.log(message);
             // logger.success(message);
-            logFile.write("\n"+message);
+            logFile.write(`\n${message}`);
             res.status(200).send(expense_categories);
         } else {
             const message = "✅ Expense categories retrieved successfully";
-            console.log(message);
             // logger.success(message);
-            logFile.write("\n"+message);
+            logFile.write(`\n${message}`);
             res.status(200).send(expense_categories);
         }
     } catch (err) {
-        console.log(error_message, err);
         // logger.error(error_message, err);
-        logFile.write("\n"+error_message, err);
+        logFile.write(`\n${error_message} - ${err}`);
         res.status(400).send(err);
     }
 };

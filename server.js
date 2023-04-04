@@ -24,7 +24,6 @@ app.use(cors(corsOptions));
 // Set up logger tools
 app.use(morgan("combined", { stream: morganLogFile }));
 app.use((req, res, next) => {
-    console.log(`${Date(Date.now())} - [ ${req.method} || ${res.statusCode} ] - ${req.url}`);
     logFile.write(`\n${Date(Date.now())} - [ ${req.method} || ${res.statusCode} ] - ${req.url}`);
     next();
 });
@@ -55,4 +54,5 @@ app.use(require("./app/routes/routes.js"));
 const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => {
     console.log(`Port: ${PORT} ✅`);
+    logFile.write(`\nPort: ${PORT} ✅`);
 });
