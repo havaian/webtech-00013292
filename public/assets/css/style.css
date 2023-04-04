@@ -209,3 +209,9 @@ select {
 .list li:hover .delete-btn {
   opacity: 1;
 }
+
+footer {
+  width: 30%;
+  text-align: center;
+  padding-bottom: 5%;
+}

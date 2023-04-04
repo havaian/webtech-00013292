@@ -1,6 +1,5 @@
 // Import necessary modules
 const express = require("express");
-const cors = require("cors");
 const morgan = require("morgan");
 
 // Set up custom logging tool
@@ -14,12 +13,6 @@ require("dotenv").config();
 
 // Init express app
 const app = express();
-
-// Set up cors
-var corsOptions = {
-    origin: "*",
-};
-app.use(cors(corsOptions));
 
 // Set up logger tools
 app.use(morgan("combined", { stream: morganLogFile }));
