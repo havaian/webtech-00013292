@@ -1,69 +1,58 @@
+// Import necessary modules
 const express = require("express");
-const bodyParser = require("body-parser");
 const cors = require("cors");
-const db = require("./app/models/index.js");
+const morgan = require("morgan");
 
-const mongoose = require("mongoose");
-mongoose.Promise = global.Promise;
+// Set up custom logging tool
+const fs = require("fs");
+// const logger = require("./app/logs/logger.js");
+const morganLogFile = fs.createWriteStream("./app/logs/morgan.log", { flags: "a" });
+const logFile = fs.createWriteStream("./app/logs/access.log", { flags: "a" });
 
-const controllers = require('./app/controllers/sample.controller');
+// Require dotenv config
+require("dotenv").config();
 
+// Init express app
 const app = express();
+
+// Set up cors
 var corsOptions = {
-  origin: '*'
+    origin: "*",
 };
 app.use(cors(corsOptions));
 
+// Set up logger tools
+app.use(morgan("combined", { stream: morganLogFile }));
+app.use((req, res, next) => {
+    console.log(`${Date(Date.now())} - [ ${req.method} || ${res.statusCode} ] - ${req.url}`);
+    logFile.write(`\n${Date(Date.now())} - [ ${req.method} || ${res.statusCode} ] - ${req.url}`);
+    next();
+});
+
 // parse requests of content-type - application/json
-app.use(bodyParser.json());
+app.use(express.json());
 
 // parse requests of content-type - application/x-www-form-urlencoded
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(
+    express.urlencoded({
+        extended: true,
+    })
+);
 
-app.get("/", (req, res) => {
-  res.json({ 
-    message: `It's working! 🙌`
-  });
-});
+// Setting express default folder for views to /app/views
+app.set("views", __dirname + "/public/views");
 
-app.get("/get-all-things", (req, res) => {
-  controllers.findAllThings(req, res);
-});
- 
-app.get("/get-thing/:id", (req, res) => {
-  controllers.findOneThing(req, res);
-});
+// Setting express view engine to ejs
+app.set("view engine", "ejs");
 
-app.post('/add-thing', (req, res) => {
-  controllers.addOneThing(req, res);
-});
+// Configuring /public directory as default for assets
+app.use(express.static(__dirname + "/public"));
 
-app.post("/update-thing/:id", (req, res) => {
-  controllers.updateOneThing(req, res);
-});
-
-app.post("/delete-thing/:id", (req, res) => {
-  controllers.deleteOneThing(req, res);
-});
-
-app.post("/delete-all-things", (req, res) => {
-  controllers.deleteAllThings(req, res);
-});
+// Import routes
+app.use(require("./app/routes/routes.js"));
 
 // set port, listen for requests
 const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => {
-  console.log(`Port: ${PORT} ✅`);
-});
-
-db.mongoose.connect(db.url, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true
-})
-.then(() => {
-  console.log("MongoDB ✅");
-})
-.catch(err => {
-  console.log("MongoDB ❌", err);
-  process.exit();
+    console.log(`Port: ${PORT} ✅`);
 });
