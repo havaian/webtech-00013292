@@ -1,14 +1,19 @@
 const express = require("express");
 const router = express.Router();
-const app = express();
 const controllers = require("../controllers/mt.controller");
+
+// Require dotenv
+require("dotenv").config();
 
 // Import data from /app/data directory
 const expenses = require("../data/expenses.json");
 const expense_categories = require("../data/expense_categories.json");
 
+// Import API URL from .env
+const api_url = process.env.API_URL;
+
 router.get("/", (req, res) => {
-    res.render("index", { expenses, expense_categories });
+    res.render("index", { expenses, expense_categories, api_url });
 });
 
 router.get("/get-all-expenses", (req, res) => {

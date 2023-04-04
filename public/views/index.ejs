@@ -81,9 +81,11 @@
 
   window.expenses = <%- JSON.stringify(expenses) %>;
   window.expense_categories = <%- JSON.stringify(expense_categories) %>;
+  window.api_url = <%- JSON.stringify(api_url) %>;
 
   let transactions = window.expenses;
   let expense_categories = window.expense_categories;
+  let api_url = window.api_url;
 
   const callAlert = (color, title, alertMsg, command) => {
     $.confirm({
@@ -111,7 +113,7 @@
           btnClass: 'btn-green',
           action: (confirmButton) => {
             $.alert('Deleted!');
-            axios.post("http://localhost:5050/delete-expense/" + id)
+            axios.post(`${api_url}/delete-expense/` + id)
               .then(res => {
                 if (res.status === 200) {
                   callAlert("green", "Successfully deleted!",
@@ -184,7 +186,7 @@
         category: category.value,
         datetime: datetime.value
       };
-      axios.post("http://localhost:5050/add-expense", transaction)
+      axios.post(`${api_url}/add-expense`, transaction)
         .then(res => {
           if (res.status === 200) {
             callAlert("green", "New expense record added!", "You have just added a new expense record",
